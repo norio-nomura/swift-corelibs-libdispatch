@@ -42,7 +42,6 @@ TESTS=							\
 	dispatch_priority			\
 	dispatch_priority2			\
 	dispatch_context_for_key	\
-	dispatch_read				\
 	dispatch_after				\
 	dispatch_timer				\
 	dispatch_timer_timeout		\
@@ -51,9 +50,7 @@ TESTS=							\
 	dispatch_timer_bit63		\
 	dispatch_starfish			\
 	dispatch_cascade			\
-	dispatch_data				\
-	dispatch_io_net				\
-	dispatch_select
+	dispatch_data
 
 # Tests that are currently failing intermittently, sometimes as hangs and therefore
 # can't be run
@@ -64,8 +61,11 @@ FAILING_TESTS = 				\
 	dispatch_timer_short		\
 	dispatch_sema				\
 	dispatch_readsync			\
+	dispatch_read				\
 	dispatch_read2				\
 	dispatch_io					\
+	dispatch_io_net				\
+	dispatch_select				\
 	dispatch_timer_set_time		\
 	dispatch_drift
 
