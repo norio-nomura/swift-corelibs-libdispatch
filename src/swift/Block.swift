@@ -39,7 +39,7 @@ public class DispatchWorkItem {
 	internal var _block: _DispatchBlock
 	internal var _group: DispatchGroup?
 
-	public init(group: DispatchGroup? = nil, qos: DispatchQoS = .unspecified, flags: DispatchWorkItemFlags = [], block: @convention(block) () -> ()) {
+	public init(qos: DispatchQoS = .unspecified, flags: DispatchWorkItemFlags = [], block: @convention(block) () -> ()) {
 		_block =  dispatch_block_create_with_qos_class(dispatch_block_flags_t(flags.rawValue),
 			qos.qosClass.rawValue.rawValue, Int32(qos.relativePriority), block)
 	}
@@ -51,10 +51,6 @@ public class DispatchWorkItem {
 	}
 
 	public func perform() {
-		if let g = _group { 
-			g.enter() 
-			defer { g.leave() }
-		}
 		_block()
 	}
 
@@ -63,14 +59,19 @@ public class DispatchWorkItem {
 	}
 
 	public func wait(timeout: DispatchTime) -> DispatchTimeoutResult {
-		return dispatch_block_wait(_block, timeout.rawValue) == 0 ? .Success : .TimedOut
+		return dispatch_block_wait(_block, timeout.rawValue) == 0 ? .success : .timedOut
 	}
 
 	public func wait(wallTimeout: DispatchWallTime) -> DispatchTimeoutResult {
-		return dispatch_block_wait(_block, wallTimeout.rawValue) == 0 ? .Success : .TimedOut
+		return dispatch_block_wait(_block, wallTimeout.rawValue) == 0 ? .success : .timedOut
 	}
 
-	public func notify(qos: DispatchQoS = .unspecified, flags: DispatchWorkItemFlags = [], queue: DispatchQueue, execute: @convention(block) () -> Void) {
+	public func notify(
+		qos: DispatchQoS = .unspecified, 
+		flags: DispatchWorkItemFlags = [], 
+		queue: DispatchQueue, 
+		execute: @convention(block) () -> Void) 
+	{
 		if qos != .unspecified || !flags.isEmpty {
 			let item = DispatchWorkItem(qos: qos, flags: flags, block: execute)
 			dispatch_block_notify(_block, queue.__wrapped, item._block)
@@ -89,17 +90,6 @@ public class DispatchWorkItem {
 
 	public var isCancelled: Bool {
 		return dispatch_block_testcancel(_block) != 0
-	}
-}
-
-@available(OSX 10.10, iOS 8.0, *)
-public extension DispatchWorkItem {
-	@available(*, deprecated, renamed: "DispatchWorkItem.wait(self:wallTimeout:)")
-	public func wait(timeout: DispatchWallTime) -> Int {
-		switch wait(wallTimeout: timeout) {
-		case .Success: return 0
-		case .TimedOut: return DispatchTimeoutResult.KERN_OPERATION_TIMED_OUT
-		}
 	}
 }
 
