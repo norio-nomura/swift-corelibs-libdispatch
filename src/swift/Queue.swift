@@ -114,12 +114,12 @@ public extension DispatchQueue {
 	@available(OSX, deprecated: 10.10, message: "")
 	@available(*, deprecated: 8.0, message: "")
 	public class func global(priority: GlobalQueuePriority) -> DispatchQueue {
-		return CDispatch.dispatch_get_global_queue(priority._translatedValue, 0)
+		return DispatchQueue(queue: CDispatch.dispatch_get_global_queue(priority._translatedValue, 0))
 	}
 
 	@available(OSX 10.10, iOS 8.0, *)
 	public class func global(qos: DispatchQoS.QoSClass = .default) -> DispatchQueue {
-		return CDispatch.dispatch_get_global_queue(Int(qos.rawValue.rawValue), 0)
+		return DispatchQueue(queue: CDispatch.dispatch_get_global_queue(Int(qos.rawValue.rawValue), 0))
 	}
 
 	public class func getSpecific<T>(key: DispatchSpecificKey<T>) -> T? {
@@ -172,7 +172,7 @@ public extension DispatchQueue {
 
 	@available(OSX 10.10, iOS 8.0, *)
 	public func async(group: DispatchGroup, execute workItem: DispatchWorkItem) {
-		CDispatch.dispatch_group_async(group.__wrapped, self, workItem._block)
+		CDispatch.dispatch_group_async(group.__wrapped, self.__wrapped, workItem._block)
 	}
 
 	public func async(
