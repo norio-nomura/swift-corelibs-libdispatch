@@ -114,12 +114,12 @@ public extension DispatchQueue {
 	@available(OSX, deprecated: 10.10, message: "")
 	@available(*, deprecated: 8.0, message: "")
 	public class func global(priority: GlobalQueuePriority) -> DispatchQueue {
-		return dispatch_get_global_queue(priority._translatedValue, 0)
+		return CDispatch.dispatch_get_global_queue(priority._translatedValue, 0)
 	}
 
 	@available(OSX 10.10, iOS 8.0, *)
 	public class func global(qos: DispatchQoS.QoSClass = .default) -> DispatchQueue {
-		return dispatch_get_global_queue(Int(qos.rawValue.rawValue), 0)
+		return CDispatch.dispatch_get_global_queue(Int(qos.rawValue.rawValue), 0)
 	}
 
 	public class func getSpecific<T>(key: DispatchSpecificKey<T>) -> T? {
@@ -145,7 +145,7 @@ public extension DispatchQueue {
 			attr = autoreleaseFrequency._attr(attr: attr) 
 		}
 		if #available(OSX 10.10, iOS 8.0, *), qos != .unspecified {
-			attr = CDispatch.dispatch_queue_attr_make_with_qos_class(attr, qos.qosClass.rawValue, Int32(qos.relativePriority))
+			attr = CDispatch.dispatch_queue_attr_make_with_qos_class(attr, qos.qosClass.rawValue.rawValue, Int32(qos.relativePriority))
 		}
 
 		if #available(OSX 10.12, iOS 10.0, tvOS 10.0, watchOS 3.0, *) {
@@ -162,17 +162,17 @@ public extension DispatchQueue {
 
 	@available(OSX 10.10, iOS 8.0, *)
 	public func sync(execute workItem: DispatchWorkItem) {
-		dispatch_sync(self.__wrapped, workItem._block)
+		CDispatch.dispatch_sync(self.__wrapped, workItem._block)
 	}
 
 	@available(OSX 10.10, iOS 8.0, *)
 	public func async(execute workItem: DispatchWorkItem) {
-		dispatch_async(self, workItem._block)
+		CDispatch.dispatch_async(self, workItem._block)
 	}
 
 	@available(OSX 10.10, iOS 8.0, *)
 	public func async(group: DispatchGroup, execute workItem: DispatchWorkItem) {
-		_dispatch_group_async(group, self, workItem._block)
+		CDispatch.dispatch_group_async(group, self, workItem._block)
 	}
 
 	public func async(
@@ -183,7 +183,7 @@ public extension DispatchQueue {
 	{
 		if group == nil && qos == .unspecified && flags.isEmpty {
 			// Fast-path route for the most common API usage
-			dispatch_async(self, work)
+			CDispatch.dispatch_async(self, work)
 			return
 		}
 
@@ -194,14 +194,14 @@ public extension DispatchQueue {
 		}
 
 		if let g = group {
-			dispatch_group_async(g, self, block)
+			CDispatch.dispatch_group_async(g, self, block)
 		} else {
-			dispatch_async(self, block)
+			CDispatch.dispatch_async(self, block)
 		}
 	}
 
 	private func _syncBarrier(block: @noescape () -> ()) {
-		dispatch_barrier_sync(self.__wrapped, block)
+		CDispatch.dispatch_barrier_sync(self.__wrapped, block)
 	}
 
 	private func _syncHelper<T>(
@@ -271,9 +271,9 @@ public extension DispatchQueue {
 	{
 		if #available(OSX 10.10, iOS 8.0, *), qos != .unspecified || !flags.isEmpty {
 			let item = DispatchWorkItem(qos: qos, flags: flags, block: work)
-			dispatch_after(deadline.rawValue, self, item._block)
+			CDispatch.dispatch_after(deadline.rawValue, self, item._block)
 		} else {
-			dispatch_after(deadline.rawValue, self, work)
+			CDispatch.dispatch_after(deadline.rawValue, self, work)
 		}
 	}
 
@@ -285,20 +285,20 @@ public extension DispatchQueue {
 	{
 		if #available(OSX 10.10, iOS 8.0, *), qos != .unspecified || !flags.isEmpty {
 			let item = DispatchWorkItem(qos: qos, flags: flags, block: work)
-			dispatch_after(wallDeadline.rawValue, self, item._block)
+			CDispatch.dispatch_after(wallDeadline.rawValue, self, item._block)
 		} else {
-			dispatch_after(wallDeadline.rawValue, self, work)
+			CDispatch.dispatch_after(wallDeadline.rawValue, self, work)
 		}
 	}
 
 	@available(OSX 10.10, iOS 8.0, *)
 	public func asyncAfter(deadline: DispatchTime, execute: DispatchWorkItem) {
-		dispatch_after(deadline.rawValue, self, execute._block)
+		CDispatch.dispatch_after(deadline.rawValue, self, execute._block)
 	}
 
 	@available(OSX 10.10, iOS 8.0, *)
 	public func asyncAfter(wallDeadline: DispatchWallTime, execute: DispatchWorkItem) {
-		dispatch_after(wallDeadline.rawValue, self, execute._block)
+		CDispatch.dispatch_after(wallDeadline.rawValue, self, execute._block)
 	}
 
 	@available(OSX 10.10, iOS 8.0, *)
