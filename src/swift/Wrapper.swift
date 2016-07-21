@@ -159,7 +159,7 @@ public class DispatchQueue : DispatchObject {
 }
 
 public class DispatchSource : DispatchObject,
-	DispatchSourceType,	DispatchSourceRead,
+	DispatchSourceProtocol,	DispatchSourceRead,
 	DispatchSourceSignal, DispatchSourceTimer,
 	DispatchSourceUserDataAdd, DispatchSourceUserDataOr,
 	DispatchSourceWrite {
@@ -208,7 +208,7 @@ internal class __DispatchData : DispatchObject {
 
 public typealias DispatchSourceHandler = @convention(block) () -> Void
 
-public protocol DispatchSourceType {
+public protocol DispatchSourceProtocol {
 	func setEventHandler(qos: DispatchQoS, flags: DispatchWorkItemFlags, handler: DispatchSourceHandler?)
 
 	func setEventHandler(handler: DispatchWorkItem)
@@ -236,7 +236,7 @@ public protocol DispatchSourceType {
 	var isCancelled: Bool { get }
 }
 
-public protocol DispatchSourceUserDataAdd : DispatchSourceType {
+public protocol DispatchSourceUserDataAdd : DispatchSourceProtocol {
 	func mergeData(value: UInt)
 }
 
@@ -247,7 +247,7 @@ public protocol DispatchSourceUserDataOr {
 }
 
 #if HAVE_MACH
-public protocol DispatchSourceMachSend : DispatchSourceType {
+public protocol DispatchSourceMachSend : DispatchSourceProtocol {
 	public var handle: mach_port_t { get }
 
 	public var data: DispatchSource.MachSendEvent { get }
@@ -257,13 +257,13 @@ public protocol DispatchSourceMachSend : DispatchSourceType {
 #endif
 
 #if HAVE_MACH
-public protocol DispatchSourceMachReceive : DispatchSourceType {
+public protocol DispatchSourceMachReceive : DispatchSourceProtocol {
 	var handle: mach_port_t { get }
 }
 #endif
 
 #if HAVE_MACH
-public protocol DispatchSourceMemoryPressure : DispatchSourceType {
+public protocol DispatchSourceMemoryPressure : DispatchSourceProtocol {
 	public var data: DispatchSource.MemoryPressureEvent { get }
 
 	public var mask: DispatchSource.MemoryPressureEvent { get }
@@ -271,7 +271,7 @@ public protocol DispatchSourceMemoryPressure : DispatchSourceType {
 #endif
 
 #if !os(Linux)
-public protocol DispatchSourceProcess : DispatchSourceType {
+public protocol DispatchSourceProcess : DispatchSourceProtocol {
 	var handle: pid_t { get }
 
 	var data: DispatchSource.ProcessEvent { get }
@@ -280,13 +280,13 @@ public protocol DispatchSourceProcess : DispatchSourceType {
 }
 #endif
 
-public protocol DispatchSourceRead : DispatchSourceType {
+public protocol DispatchSourceRead : DispatchSourceProtocol {
 }
 
-public protocol DispatchSourceSignal : DispatchSourceType {
+public protocol DispatchSourceSignal : DispatchSourceProtocol {
 }
 
-public protocol DispatchSourceTimer : DispatchSourceType {
+public protocol DispatchSourceTimer : DispatchSourceProtocol {
 	func setTimer(start: DispatchTime, leeway: DispatchTimeInterval)
 
 	func setTimer(walltime start: DispatchWallTime, leeway: DispatchTimeInterval)
@@ -301,7 +301,7 @@ public protocol DispatchSourceTimer : DispatchSourceType {
 }
 
 #if !os(Linux)
-public protocol DispatchSourceFileSystemObject : DispatchSourceType {
+public protocol DispatchSourceFileSystemObject : DispatchSourceProtocol {
 	var handle: Int32 { get }
 
 	var data: DispatchSource.FileSystemEvent { get }
@@ -310,7 +310,7 @@ public protocol DispatchSourceFileSystemObject : DispatchSourceType {
 }
 #endif
 
-public protocol DispatchSourceWrite : DispatchSourceType {
+public protocol DispatchSourceWrite : DispatchSourceProtocol {
 }
 
 
