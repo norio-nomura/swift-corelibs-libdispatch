@@ -85,8 +85,10 @@ public struct DispatchQoS : Equatable {
 
 		case unspecified
 
+		// _OSQoSClass is internal on Linux, so this initialiser has to 
+		// remain as an internal init.
 		@available(OSX 10.10, iOS 8.0, *)
-		public init?(rawValue: _OSQoSClass) {
+		internal init?(rawValue: _OSQoSClass) {
 			switch rawValue {
 			case .QOS_CLASS_BACKGROUND: self = .background
 			case .QOS_CLASS_UTILITY: self = .utility
