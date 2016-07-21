@@ -183,7 +183,7 @@ public extension DispatchQueue {
 	{
 		if group == nil && qos == .unspecified && flags.isEmpty {
 			// Fast-path route for the most common API usage
-			CDispatch.dispatch_async(self,.__wrapped work)
+			CDispatch.dispatch_async(self.__wrapped, work)
 			return
 		}
 
