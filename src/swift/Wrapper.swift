@@ -287,17 +287,17 @@ public protocol DispatchSourceSignal : DispatchSourceProtocol {
 }
 
 public protocol DispatchSourceTimer : DispatchSourceProtocol {
-	func setTimer(start: DispatchTime, leeway: DispatchTimeInterval)
+	func scheduleOneshot(deadline: DispatchTime, leeway: DispatchTimeInterval)
 
-	func setTimer(walltime start: DispatchWallTime, leeway: DispatchTimeInterval)
+	func scheduleOneshot(wallDeadline: DispatchWallTime, leeway: DispatchTimeInterval)
 
-	func setTimer(start: DispatchTime, interval: DispatchTimeInterval, leeway: DispatchTimeInterval)
+	func scheduleRepeating(deadline: DispatchTime, interval: DispatchTimeInterval, leeway: DispatchTimeInterval)
 
-	func setTimer(start: DispatchTime, interval: Double, leeway: DispatchTimeInterval)
+	func scheduleRepeating(deadline: DispatchTime, interval: Double, leeway: DispatchTimeInterval)
 
-	func setTimer(walltime start: DispatchWallTime, interval: DispatchTimeInterval, leeway: DispatchTimeInterval)
+	func scheduleRepeating(wallDeadline: DispatchWallTime, interval: DispatchTimeInterval, leeway: DispatchTimeInterval)
 
-	func setTimer(walltime start: DispatchWallTime, interval: Double, leeway: DispatchTimeInterval)
+	func scheduleRepeating(wallDeadline: DispatchWallTime, interval: Double, leeway: DispatchTimeInterval)
 }
 
 #if !os(Linux)

@@ -330,7 +330,7 @@ public extension DispatchSourceUserDataAdd {
 	/// as specified by the dispatch source type. A value of zero has no effect
 	/// and will not result in the submission of the event handler block.
 	public func add(data: UInt) {
-		dispatch_source_merge_data((self as! DispatchSource).__wrapped, value)
+		dispatch_source_merge_data((self as! DispatchSource).__wrapped, data)
 	}
 }
 
@@ -347,7 +347,7 @@ public extension DispatchSourceUserDataOr {
 	/// as specified by the dispatch source type. A value of zero has no effect
 	/// and will not result in the submission of the event handler block.
 	public func or(data: UInt) {
-		dispatch_source_merge_data((self as! DispatchSource).__wrapped, value)
+		dispatch_source_merge_data((self as! DispatchSource).__wrapped, data)
 	}
 }
 
