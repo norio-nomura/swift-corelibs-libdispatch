@@ -168,7 +168,7 @@ public extension DispatchQueue {
 	}
 
 	// Temporary for swift-corelibs-foundation
-	@available(*, renamed, message: "DispatchQueue(label:attributes:)")
+	@available(*, deprecated, renamed: "DispatchQueue(label:attributes:)")
 	public convenience init(
 		label: String,
 		attributes: DispatchQueueAttributes)
