@@ -36,6 +36,7 @@ public struct DispatchQueueAttributes : OptionSet {
 		switch self {
 		case .concurrent: return .concurrent
 		default: return []
+		}
 	}
 }
 
