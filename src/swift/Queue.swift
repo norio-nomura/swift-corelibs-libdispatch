@@ -33,10 +33,8 @@ public struct DispatchQueueAttributes : OptionSet {
 	public static let concurrent = DispatchQueueAttributes(rawValue: 1<<1)
 
 	private var _translatedValue: DispatchQueue.Attributes {
-		switch self {
-		case .concurrent: return .concurrent
-		default: return []
-		}
+		if self.contains(.concurrent) { return .concurrent }
+		return []
 	}
 }
 
@@ -97,7 +95,7 @@ public extension DispatchQueue {
 	public enum GlobalQueueDeprecatedPriority {
 		case qosBackground
 
-		private var _translatedValue: DispatchQoS {
+		private var _translatedValue: DispatchQoS.QoSClass {
 			switch self {
 			case .qosBackground: return .background
 			}
