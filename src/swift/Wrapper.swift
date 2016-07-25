@@ -237,13 +237,11 @@ public protocol DispatchSourceProtocol {
 }
 
 public protocol DispatchSourceUserDataAdd : DispatchSourceProtocol {
-	func mergeData(value: UInt)
+	func add(data: UInt)
 }
 
-public protocol DispatchSourceUserDataOr {
-#if false /*FIXME: clashes with UserDataAdd?? */
-	func mergeData(value: UInt)
-#endif
+public protocol DispatchSourceUserDataOr : DispatchSourceProtocol {
+	func or(data: UInt)
 }
 
 #if HAVE_MACH
