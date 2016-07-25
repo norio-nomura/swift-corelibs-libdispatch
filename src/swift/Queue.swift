@@ -23,6 +23,22 @@ internal class _DispatchSpecificValue<T> {
 	internal init(value: T) { self.value = value }
 }
 
+// Temporary for swift-corelibs-foundation
+@available(*, deprecated, renamed: "DispatchQueue.Attributes")
+public struct DispatchQueueAttributes : OptionSet {
+	public let rawValue: UInt64
+	public init(rawValue: UInt64) { self.rawValue = rawValue }
+
+	public static let serial = DispatchQueueAttributes(rawValue: 1<<0)
+	public static let concurrent = DispatchQueueAttributes(rawValue: 1<<1)
+
+	private var _translatedValue: DispatchQueue.Attributes {
+		switch self {
+		case .concurrent: return .concurrent
+		default: return []
+	}
+}
+
 public extension DispatchQueue {
 	public struct Attributes : OptionSet {
 		public let rawValue: UInt64
@@ -75,6 +91,18 @@ public extension DispatchQueue {
 		}
 	}
 
+	// Temporary for swift-corelibs-foundation
+	@available(*, deprecated, renamed: "DispatchQoS")
+	public enum GlobalQueueDeprecatedPriority {
+		case qosBackground
+
+		private var _translatedValue: DispatchQoS {
+			switch self {
+			case .qosBackground: return .background
+			}
+		}
+	}
+
 	public enum AutoreleaseFrequency {
 		case inherit
 
@@ -117,6 +145,12 @@ public extension DispatchQueue {
 		return DispatchQueue(queue: CDispatch.dispatch_get_global_queue(priority._translatedValue, 0))
 	}
 
+	// Temporary for swift-corelibs-foundation
+	@available(*, deprecated, renamed: "DispatchQueue.global(qos:)")
+	public class func global(attributes: GlobalQueueDeprecatedPriority) -> DispatchQueue {
+		return global(qos: attributes._translatedValue)
+	}
+
 	@available(OSX 10.10, iOS 8.0, *)
 	public class func global(qos: DispatchQoS.QoSClass = .default) -> DispatchQueue {
 		return DispatchQueue(queue: CDispatch.dispatch_get_global_queue(Int(qos.rawValue.rawValue), 0))
@@ -131,6 +165,15 @@ public extension DispatchQueue {
 			return v.value
 		}
 		return nil
+	}
+
+	// Temporary for swift-corelibs-foundation
+	@available(*, renamed, message: "DispatchQueue(label:attributes:)")
+	public convenience init(
+		label: String,
+		attributes: DispatchQueueAttributes)
+	{
+		self.init(label: label, attributes: attributes._translatedValue)
 	}
 
 	public convenience init(
