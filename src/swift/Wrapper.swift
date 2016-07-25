@@ -15,7 +15,7 @@ import CDispatch
 // This file contains declarations that are provided by the
 // importer via Dispatch.apinote when the platform has Objective-C support
 
-@noreturn public func dispatchMain() {
+public func dispatchMain() -> Never {
 	CDispatch.dispatch_main()
 }
 
