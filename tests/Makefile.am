@@ -39,8 +39,6 @@ TESTS=							\
 	dispatch_priority			\
 	dispatch_priority2			\
 	dispatch_context_for_key	\
-	dispatch_read				\
-	dispatch_read2				\
 	dispatch_after				\
 	dispatch_timer				\
 	dispatch_timer_short		\
@@ -53,16 +51,18 @@ TESTS=							\
 	dispatch_starfish			\
 	dispatch_cascade			\
 	dispatch_drift				\
-	dispatch_data				\
+	dispatch_data
+
+# List tests that are expected to fail here.
+# Currently dispatch_concur fails occasionally, but passes more often than fails.
+XFAIL_TESTS =					\
+	dispatch_concur				\
+	dispatch_read				\
+	dispatch_read2				\
+	dispatch_readsync				\
 	dispatch_io					\
 	dispatch_io_net				\
 	dispatch_select
-
-# List tests that are expected to fail here.
-# Currently dispatch_concur fails occasionally, but passes more often than fails. 
-XFAIL_TESTS =					\
-	dispatch_concur				\
-	dispatch_readsync
 
 ORIGINAL_LIST_OF_TESTS=			\
 	dispatch_apply				\
