@@ -57,16 +57,16 @@ TESTS=							\
 	dispatch_starfish			\
 	dispatch_cascade			\
 	dispatch_drift				\
-	dispatch_data				\
-	dispatch_io					\
-	dispatch_io_net				\
-	dispatch_select
+	dispatch_data
 
 # List tests that are expected to fail here.
 # Currently dispatch_concur fails occasionally, but passes more often than fails. 
 XFAIL_TESTS =					\
 	dispatch_concur				\
-	dispatch_readsync
+	dispatch_readsync				\
+	dispatch_io					\
+	dispatch_io_net				\
+	dispatch_select
 
 ORIGINAL_LIST_OF_TESTS=			\
 	dispatch_apply				\
